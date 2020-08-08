@@ -25,35 +25,55 @@ public class CoreTestCase extends TestCase {
     @Override
     protected void tearDown() throws Exception
     {
-        if (driver.getOrientation() != ScreenOrientation.PORTRAIT) {
-            driver.rotate(ScreenOrientation.PORTRAIT);
-        }
-        driver.quit();
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            if (driver.getOrientation() != ScreenOrientation.PORTRAIT) {
+                driver.rotate(ScreenOrientation.PORTRAIT);
+            }
+            driver.quit();
 
-        super.tearDown();
+            super.tearDown();
+        }
     }
 
     protected void rotateScreenPortrait()
     {
-        driver.rotate(ScreenOrientation.PORTRAIT);
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        } else {
+            System.out.println("Method rotateScreenPortrait() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+
     }
 
     protected void rotateScreenLandscape()
     {
-        driver.rotate(ScreenOrientation.LANDSCAPE);
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+        } else {
+            System.out.println("Method rotateScreenPortrait() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     protected void backgroundAp(int seconds)
     {
-        driver.runAppInBackground(Duration.ofSeconds(seconds));
+        if (driver instanceof AppiumDriver) {
+            AppiumDriver driver = (AppiumDriver) this.driver;
+            driver.runAppInBackground(Duration.ofSeconds(seconds));
+        } else {
+            System.out.println("Method rotateScreenPortrait() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     private void skipWelcomePageForIOSApp()
-    {
-        if (Platform.getInstance().isIOS()) {
-            WelcomePageObject WelcomePageObject = new WelcomePageObject(driver);
-            WelcomePageObject.clickSkip();
+        {
+            if (Platform.getInstance().isIOS()) {
+                AppiumDriver driver = (AppiumDriver) this.driver;
+                WelcomePageObject WelcomePageObject = new WelcomePageObject(driver);
+                WelcomePageObject.clickSkip();
+            }
         }
-    }
 
 }
