@@ -1,6 +1,5 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -14,6 +13,7 @@ abstract public class ArticlePageObject extends MainPageObject
             OPTIONS_BUTTON,
             MENU_OPTIONS,
             OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
             ADD_TO_MY_LIST_OVERLAY,
             MY_LIST_NAME_INPUT,
             MY_LIST_OK_BUTTON,
@@ -140,6 +140,9 @@ abstract public class ArticlePageObject extends MainPageObject
 
     public void addArticleToMySaved()
     {
+        if (Platform.getInstance().isMW()) {
+            this.removeArticleFromSavedIfItAdded();
+        }
         this.waitForElementAndClick(
                 OPTIONS_ADD_TO_MY_LIST_BUTTON,
                 "Cannot find option to add article to reading list",
@@ -147,13 +150,33 @@ abstract public class ArticlePageObject extends MainPageObject
         );
     }
 
+    public void removeArticleFromSavedIfItAdded()
+    {
+        if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
+           this.waitForElementAndClick(
+                   OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
+                   "Cannot click button to remove the article from saved",
+                   1
+           );
+           this.waitForElementPresent(
+                   OPTIONS_REMOVE_FROM_MY_LIST_BUTTON,
+                   "Cannot click button to add an article to saved list after removing it from this list before"
+           );
+        }
+    }
+
     public void closeArticle()
     {
-        this.waitForElementAndClick(
-                CLOSE_ARTICLE_BUTTON,
-                "Cannot close article, cannot find x link",
-                5
-        );
+        if ((Platform.getInstance().isIOS()) || (Platform.getInstance().isAndroid())) {
+            this.waitForElementAndClick(
+                    CLOSE_ARTICLE_BUTTON,
+                    "Cannot close article, cannot find x link",
+                    5
+            );
+        } else {
+            System.out.println("Method closeArticle() do nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+
     }
 
 }

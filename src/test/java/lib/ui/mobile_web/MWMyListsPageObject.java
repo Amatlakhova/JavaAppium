@@ -1,18 +1,19 @@
-package lib.ui.ios;
+package lib.ui.mobile_web;
 
 import lib.ui.MyListsPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class IOSMyListsPageObject extends MyListsPageObject
-{
+public class MWMyListsPageObject extends MyListsPageObject {
+
     static {
-        ARTICLE_BY_TITLE_TPL = "xpath://XCUIElementTypeStaticText[contains(@name,'{TITLE}')]";
+        ARTICLE_BY_TITLE_TPL = "xpath://ul[contains(@class,'watchlist')]//h3[contains(text(),'{TITLE}')]";
+        REMOVE_FROM_SAVED_BUTTON = "xpath://ul[contains(@class,'watchlist')]//h3[contains(text(),'{TITLE}')]/../../div[contains(@class,'watched')]";
         MY_SAVED_LIST = "xpath://XCUIElementTypeStaticText[contains(@name,'{TITLE}')]";
         CLOSE_SYNC_SAVED_ARTICLE = "xpath://XCUIElementTypeButton[@name='Close']";
         ARTICLE_LIST_DESCRIPTION = "id:Set of several computer software products and specifications";
     }
 
-    public IOSMyListsPageObject(RemoteWebDriver driver)
+    public MWMyListsPageObject(RemoteWebDriver driver)
     {
         super(driver);
     }

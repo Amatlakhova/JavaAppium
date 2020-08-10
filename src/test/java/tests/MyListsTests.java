@@ -2,10 +2,7 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.Platform;
-import lib.ui.ArticlePageObject;
-import lib.ui.MyListsPageObject;
-import lib.ui.NavigationUI;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
@@ -15,6 +12,9 @@ import org.junit.Test;
 public class MyListsTests extends CoreTestCase
 {
     private final static String name_of_folder = "Learning programming";
+    private final static String
+            login = "amatlakhova",
+            password = "petra121314wqe";
 
     @Test
     public void testSaveFirstArticleToMyList()
@@ -23,7 +23,7 @@ public class MyListsTests extends CoreTestCase
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement("Java (programming language)");
@@ -32,13 +32,31 @@ public class MyListsTests extends CoreTestCase
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addFirstArticleToMyList(name_of_folder);
             ArticlePageObject.closeArticle();
-        } else {
+        }
+        if (Platform.getInstance().isIOS()) {
             ArticlePageObject.addArticleToMySaved();
             ArticlePageObject.closeArticle();
             SearchPageObject.clickCancelSearch();
         }
+        if (Platform.getInstance().isMW()) {
+            ArticlePageObject.addArticleToMySaved();
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+            ArticlePageObject.waitForTitleElement("Java (programming language)");
+
+            assertEquals(
+                    "We are not on the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle("Java (programming language)")
+            );
+            ArticlePageObject.addArticleToMySaved();
+            ArticlePageObject.closeArticle();
+        }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);

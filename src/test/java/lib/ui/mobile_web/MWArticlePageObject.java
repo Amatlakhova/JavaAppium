@@ -9,7 +9,8 @@ public class MWArticlePageObject extends ArticlePageObject
         TITLE = "css:#content h1";
         TITLE_TPL = "id:{TITLE}";
         FOOTER_ELEMENT = "css:footer";
-        OPTIONS_ADD_TO_MY_LIST_BUTTON = "css:#page-actions li#ca-watch button";
+        OPTIONS_ADD_TO_MY_LIST_BUTTON = "css:#ca-watch:not(.watched)";
+        OPTIONS_REMOVE_FROM_MY_LIST_BUTTON = "css:#ca-watch.watched";
         MY_EXISTING_READING_LIST = "id:Saved";
     }
 
