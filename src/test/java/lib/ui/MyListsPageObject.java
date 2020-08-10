@@ -1,6 +1,5 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -12,6 +11,7 @@ abstract public class MyListsPageObject extends MainPageObject
             MY_SAVED_LIST,
             CLOSE_SYNC_SAVED_ARTICLE,
             ARTICLE_LIST_DESCRIPTION,
+            SAVED_ARTICLE_ICON,
             REMOVE_FROM_SAVED_BUTTON;
 
     private static String getFolderXpathByName(String name_of_folder)
@@ -114,6 +114,15 @@ abstract public class MyListsPageObject extends MainPageObject
         this.waitForElementPresent(
                 ARTICLE_LIST_DESCRIPTION,
                 "Cannot find description of article in My Lists",
+                5
+        );
+    }
+
+    public void verifyArticleSavedInMyListByIcon()
+    {
+        this.waitForElementPresent(
+                SAVED_ARTICLE_ICON,
+                "Cannot find saved article in my list by icon",
                 5
         );
     }

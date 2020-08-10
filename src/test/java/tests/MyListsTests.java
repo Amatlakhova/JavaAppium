@@ -52,7 +52,6 @@ public class MyListsTests extends CoreTestCase
                     ArticlePageObject.getArticleTitle("Java (programming language)")
             );
             ArticlePageObject.addArticleToMySaved();
-            ArticlePageObject.closeArticle();
         }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
@@ -76,7 +75,7 @@ public class MyListsTests extends CoreTestCase
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement("Java (programming language)");
@@ -84,28 +83,43 @@ public class MyListsTests extends CoreTestCase
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addFirstArticleToMyList(name_of_folder);
             ArticlePageObject.closeArticle();
-        } else {
+        }
+        if (Platform.getInstance().isIOS()) {
             ArticlePageObject.addArticleToMySaved();
             ArticlePageObject.closeArticle();
             SearchPageObject.clickCancelSearch();
         }
+        if (Platform.getInstance().isMW()) {
+            ArticlePageObject.addArticleToMySaved();
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+            ArticlePageObject.waitForTitleElement("Java (programming language)");
+            ArticlePageObject.addArticleToMySaved();
+        }
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Set of several computer software products and specifications");
+        SearchPageObject.clickByArticleWithSubstring("et of several computer software products and specifications");
 
         ArticlePageObject.waitForTitleElement("Java (software platform)");
 
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addSecondArticleToMyList();
             ArticlePageObject.closeArticle();
-        } else {
+        }
+        if (Platform.getInstance().isIOS()) {
             ArticlePageObject.addArticleToMySaved();
             ArticlePageObject.closeArticle();
             SearchPageObject.clickCancelSearch();
         }
+        if (Platform.getInstance().isMW()) {
+            ArticlePageObject.addArticleToMySaved();
+        }
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
@@ -113,12 +127,17 @@ public class MyListsTests extends CoreTestCase
         if (Platform.getInstance().isAndroid()) {
             MyListsPageObject.goToMyLists();
             MyListsPageObject.openFolderByName(name_of_folder);
-        } else {
+        }
+        if (Platform.getInstance().isIOS()) {
             MyListsPageObject.closePopUpSyncSavedArticle();
         }
 
         MyListsPageObject.swipeByArticleToDelete("Java (programming language)");
-        MyListsPageObject.waitForArticleDescriptionPresent();
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isIOS())) {
+            MyListsPageObject.waitForArticleDescriptionPresent();
+        } else {
+            MyListsPageObject.verifyArticleSavedInMyListByIcon();
+        }
     }
 
 }

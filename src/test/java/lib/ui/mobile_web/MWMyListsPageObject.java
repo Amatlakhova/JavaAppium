@@ -11,6 +11,7 @@ public class MWMyListsPageObject extends MyListsPageObject {
         MY_SAVED_LIST = "xpath://XCUIElementTypeStaticText[contains(@name,'{TITLE}')]";
         CLOSE_SYNC_SAVED_ARTICLE = "xpath://XCUIElementTypeButton[@name='Close']";
         ARTICLE_LIST_DESCRIPTION = "id:Set of several computer software products and specifications";
+        SAVED_ARTICLE_ICON = "css:#ca-watch.watched";
     }
 
     public MWMyListsPageObject(RemoteWebDriver driver)
