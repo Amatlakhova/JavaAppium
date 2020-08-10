@@ -13,14 +13,10 @@ public class SearchTests extends CoreTestCase {
     public void testSearchResultsPresented()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-
         SearchPageObject.initSearchInput();
-        SearchPageObject.typeSearchLine("Frida");
 
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Frida",
-                "2002 film directed by Julie Taymor"
-        );
+        SearchPageObject.typeSearchLine("Frida");
+        SearchPageObject.waitForElementByTitleAndDescription("Frida", "2002 film directed by Julie Taymor");
 
         String description;
         if (Platform.getInstance().isAndroid()) {
@@ -29,14 +25,22 @@ public class SearchTests extends CoreTestCase {
             description = "Mexican painter";
         }
 
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Frida Kahlo",
-                description
-        );
-        SearchPageObject.waitForElementByTitleAndDescription(
-                "Friday the 13th (franchise)",
-                "American horror franchise"
-        );
+        String title;
+        if (Platform.getInstance().isMW()) {
+            title = "Frida";
+        } else {
+            title = "Frida Kahlo";
+        }
+
+        SearchPageObject.waitForElementByTitleAndDescription(title, description);
+
+        if (Platform.getInstance().isMW()) {
+            title = "Frida";
+        } else {
+            title = "Friday the 13th (franchise)";
+        }
+
+        SearchPageObject.waitForElementByTitleAndDescription(title, "American horror franchise");
     }
 
     @Test
